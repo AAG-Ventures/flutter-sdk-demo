@@ -82,7 +82,7 @@ Call `setupUserData();` to initialize user profile data.
 - `loginWithSSO(String token)`: Performs the login process by sending an authorization token.
 - `refreshSession()`: Refreshes the user session to extend the session expiration time.
 - `openWallet()`: For new users opens the Signature creation flow. If Signature is created - opens Wallet activity.
-- `getSessionActivityStatus()`: `SessionActivityStatus`: Retrieves the current session activity status, which can be one of the values defined in the `SessionActivityStatus` enum.
+- `getSessionActivityStatus()`: Retrieves the current session activity status, which can be one of the values defined in the `SessionActivityStatus` enum.
 - `logout()`: Logs out the user by clearing the session data, signing out the wallet service.
 - (In progress) `cancelTokenExpirationCountdown()`: Cancels the token expiration countdown if it is currently running.
 - (In progress) `setOnTokenExpirationListener(onTokenExpirationListener: OnTokenExpirationListener)`: Sets the listener for token expiration events. You can implement the `OnTokenExpirationListener` interface to handle token expiration, session activity changes, and token countdown events.
