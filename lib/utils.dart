@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract final class Utils {
   static void showSuccessSnackBar(
@@ -34,5 +35,15 @@ abstract final class Utils {
         content: Text(message),
       ),
     );
+  }
+
+  static void setTheme(String theme) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('MyDemoThemeName', theme);
+  }
+
+  static Future<String> getTheme() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('MyDemoThemeName') ?? 'light';
   }
 }

@@ -1,24 +1,44 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:metaone_wallet_sdk/metaone_wallet_sdk.dart';
-import 'package:metaone_wallet_sdk_example/sso_login.dart';
+import 'package:metaone_wallet_sdk_example/sso_login_page.dart';
 import 'package:metaone_wallet_sdk_example/utils.dart';
+import 'package:metaone_wallet_sdk_example/wallets_page.dart';
+import 'package:metaone_wallet_sdk_example/change_theme_page.dart';
 import 'package:metaone_wallet_sdk_example/widgets.dart';
+import 'package:provider/provider.dart';
 
-void main() async {
-  await dotenv.load();
+import 'theme_provider.dart';
 
-  runApp(MyApp());
-}
+const _sdkConfig = MetaoneConfig(
+  realm: 'SHARE',
+  environment: 'test',
+  clientReference: 'demo-android-app',
+  url: 'https://static.aag.ventures/metaone/sdkconfig-demo-test.json',
+  key: 'ZNrkdLgjGh9m95wqSIPaSw',
+  sdkApiKeyPhrase: 'merry christmas',
+  mainnet: false,
+  version: '1.0.5',
+);
+
+void main() => runApp(
+  ChangeNotifierProvider(
+    create: (_) => ThemeProvider(ThemeData.light()),
+    child: MyApp(),
+  ),
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: HomePage());
+    final themeProvider = Provider.of<ThemeProvider>(context);
+    return MaterialApp(
+      theme: themeProvider.themeData,
+      home: const HomePage(),
+    );
   }
 }
 
@@ -34,23 +54,16 @@ class _HomePageState extends State<HomePage> {
   bool _isAuthorized = false;
 
   Future<void> _initializeSDK() async {
-    final sdkConfig = <String, String>{
-      'sdk.realm': dotenv.env['SDK_REALM'].toString(),
-      'sdk.environment': dotenv.env['SDK_ENVIRONMENT'].toString(),
-      'sdk.api.client.reference': dotenv.env['SDK_API_CLIENT_REFERENCE'].toString(),
-      'sdk.config.url': dotenv.env['SDK_CONFIG_URL'].toString(),
-      'sdk.key': dotenv.env['SDK_KEY'].toString(),
-    };
     try {
       setState(() {
         _isLoading = true;
       });
-      await initialize(sdkConfig);
+      await initialize(_sdkConfig);
       final sessionStatus = await getSessionActivityStatus();
       setState(() {
         _isAuthorized = sessionStatus.isActive;
         _isLoading = false;
-      });
+      }); 
       if (!mounted) return;
       Utils.showSuccessSnackBar(context, message: 'SDK initialized.');
     } catch (error) {
@@ -135,6 +148,28 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _getTokenExpirationDate() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      final tokenExpirationDate = await getExpireAt();
+      setState(() {
+        _isLoading = false;
+      });
+      if (!mounted) return;
+      Utils.showSuccessSnackBar(
+        context,
+        message: 'Token expiration date: $tokenExpirationDate',
+      );
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+      Utils.showErrorSnackBar(context, message: '$error');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -150,21 +185,26 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.all(16),
           child: _isLoading
               ? const Center(child: CircularProgressIndicator())
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (_isAuthorized)
-                      _AuthorizedView(
-                        onOpenWalletTapped: _onOpenWalletTapped,
-                        onRefreshSessionTapped: _onRefreshSessionTapped,
-                        onLogOutTapped: _onLogOutTapped,
-                      )
-                    else
-                      _UnauthorizedView(onLogInTapped: _onLogInTapped),
-                  ],
-                ),
+              : _buildContent(),
         ),
       ),
+    );
+  }
+
+  Widget _buildContent() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (_isAuthorized)
+          _AuthorizedView(
+            onOpenWalletTapped: _onOpenWalletTapped,
+            onGetTokenExpirationDateTapped: _getTokenExpirationDate,
+            onRefreshSessionTapped: _onRefreshSessionTapped,
+            onLogOutTapped: _onLogOutTapped,
+          )
+        else
+          _UnauthorizedView(onLogInTapped: _onLogInTapped),
+      ],
     );
   }
 }
@@ -191,11 +231,13 @@ class _UnauthorizedView extends StatelessWidget {
 class _AuthorizedView extends StatelessWidget {
   const _AuthorizedView({
     required this.onOpenWalletTapped,
+    required this.onGetTokenExpirationDateTapped,
     required this.onRefreshSessionTapped,
     required this.onLogOutTapped,
   });
 
   final void Function() onOpenWalletTapped;
+  final void Function() onGetTokenExpirationDateTapped;
   final void Function() onRefreshSessionTapped;
   final void Function() onLogOutTapped;
 
@@ -214,8 +256,32 @@ class _AuthorizedView extends StatelessWidget {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
+            onPressed: () => Navigator.of(context).push(ChangeThemePage.route()),
+            child: const Text('Change Theme'),
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: onGetTokenExpirationDateTapped,
+            child: const Text('Get token expiration date'),
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
             onPressed: onRefreshSessionTapped,
             child: const Text('Refresh session'),
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () => Navigator.of(context).push(MyWalletsPage.route()),
+            child: const Text('My wallets'),
           ),
         ),
         const SizedBox(height: 16),
