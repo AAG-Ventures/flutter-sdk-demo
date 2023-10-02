@@ -1,77 +1,107 @@
-# MetaOne Wallet Integration Guide for Flutter Android App
+# MetaOne Wallet Integration Guide for Flutter
 
 ## Overview
 
-This guide will walk you through integrating the MetaOne wallet into your Flutter Android app. Provide your users with a secure and convenient way to manage their digital assets with MetaOne Wallet. It is a custody wallet that eliminates the need for private keys, passphrases, or hardware wallets.
+This guide will walk you through integrating the MetaOne wallet into your Flutter app. Provide your users with a secure and convenient way to manage their digital assets with MetaOne Wallet. It is a custody wallet that eliminates the need for private keys, passphrases, or hardware wallets.
 
 ## Setup
 
-### Step 1: Setting up SSH for access to your repositories
+**Step 1: Setting up SSH for access to your repositories**
 
-After you will be accepted to the SDK integration program, you will be provided with SSH keys required to access secure repositories. If you haven’t received them, please ask your integration success manager to provide you files.
+After you are accepted to the SDK integration program, you will be provided with SSH keys required to access secure repositories. If you haven’t received them please ask your integration success manager to provide you files.
 
-### Step 2: Adding MetaOne Wallet SDK to your project
+**Step 2: Adding MetaOne Wallet SDK to your project**
 
-To begin integrating the MetaOne Wallet SDK into your Flutter application, you need to add the SDK package as a dependency in your project. The SDK package is hosted on Pub, making it easy to include in your app using Gradle and pubspec dependencies:
+**Android**
 
-Add following config to your local properties file inside the android directory:
-```
-walletsdk.maven.url=given-by-aag
+To begin integrating the MetaOne Wallet SDK into your Flutter Android application, you need to add the SDK package as a dependency in your project. The SDK package is hosted on Pub, making it easy to include in your app using Gradle and pubspec dependencies:
+
+Add the following config to your "local.properties" file inside the Android directory:
+
+`walletsdk.maven.url=given-by-aag
 walletsdk.maven.username=given-by-aag
-walletsdk.maven.password=given-by-aag
-```
+walletsdk.maven.password=given-by-aag`
 
 Add the following code to your build.gradle file:
-```gradle
-url properties.getProperty('walletsdk.maven.url')
+
+`url properties.getProperty('walletsdk.maven.url')
 credentials {
    username = properties.getProperty('walletsdk.maven.username')
    password = properties.getProperty('walletsdk.maven.password')
-}
-```
+}`
 
-Add the following code to your pubspec.yaml dependencies:
-```yaml
-metaone_wallet_sdk: ^{version}
-```
+**iOS**
 
-### Step 3: Initializing SDK
+To begin integrating the MetaOne Wallet SDK into your Flutter iOS application, you need to add the SDK dependencies to your project. The SDK package is hosted on Cocoapods, making it easy to include in your app using your project’s podfile:
 
-Import `metaone_wallet_sdk` to your Dart file:
-```dart
-import 'package:metaone_wallet_sdk/metaone_wallet_sdk.dart';
-```
+Create a .plist file named metaoneSDKConfig and add following config:\*\*
+
+`<?xml version="1.0" encoding="UTF-8"?>`
+
+`<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">`
+
+`<plist version="1.0">
+<dict>
+<key>SDK_ENVIRONMENT</key>
+<string>test (test(testnet), stage(mainnet), prod(mainnet))</string>
+<key>SDK_API_CLIENT_REFERENCE</key>
+<string>given by aag</string>
+<key>SDK_CONFIG_URL</key>
+<string>your personal SDK configuration json url</string>
+<key>SDK_KEY</key>
+<string>given by aag</string>
+<key>SDK_REALM</key>
+<string>given by aag</string>
+<key>SDK_PUB_PHRASE</key>
+<string>given by aag</string>
+</dict>
+</plist>`
+
+**Step 3: Add the following code to your Podfile:**
+
+`use_frameworks!
+pod "CYBAVOWallet", :git => 'https://github.com/AAG-Ventures/wallet-fork.git'`
+
+Add the following code to your `pubspec.yaml` dependencies:
+
+`metaone_wallet_sdk: ^{version} (latest ver. 0.1.5)`
+
+**Step 3: Initializing SDK**
+
+Import metaone_wallet_sdk to your dart file:
+
+`import 'package:metaone_wallet_sdk/metaone_wallet_sdk.dart';`
 
 Map SDK config values:
-```dart
-final sdkConfig = <String, String>{
-'sdk.realm': given-by-aag,
-'sdk.environment': given-by-aag,
-'sdk.api.client.reference': given-by-aag,
-'sdk.config.url': given-by-aag,
-'sdk.key': given-by-aag,
-};
-```
+
+`const _sdkConfig = MetaoneConfig(
+  realm: given-by-aag,
+  environment: test (test(testnet), stage(mainnet), prod(mainnet)),
+  clientReference: given-by-aag,
+  url: your personal SDK configuration json url,
+  key: given-by-aag,
+  sdkApiKeyPhrase: given-by-aag,
+  mainnet: depending on your selected environment (false/true),
+  version: your-app-version,
+);`
 
 Initialize MetaOne SDK:
-```dart
-await initialize(sdkConfig);
-```
+
+`await initialize(sdkConfig);`
 
 Check session status:
-```dart
-await getSessionActivityStatus();
-```
 
-### Step 4: Creating User Session
+`await getSessionActivityStatus();`
 
-To successfully initialize a user session, your back-end integration has to be ready first. Your backend should receive the Authorization token during initialization request.
+**Step 4: Creating User Session**
 
-Initialize session by calling: `logInWithSSO(token);`
+To successfully initialize a user session your back-end integration has to be ready first. Your backend should receive an Authorization token during the initialization request.
 
-Your session is initialized. You can now use all other functions that require Authorization.
+Initialize the session by calling: `logInWithSSO(token);`
 
-Call `setupUserData();` to initialize user profile data.
+Your session is initialized. You can now use all other functions that require Authorization
+
+Call `setupUserData();` to initialize user profile data
 
 ## Using SDK functions
 
