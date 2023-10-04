@@ -1,33 +1,40 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:metaone_wallet_sdk/metaone_wallet_sdk.dart';
+import 'package:metaone_wallet_sdk_example/change_theme_page.dart';
 import 'package:metaone_wallet_sdk_example/sso_login_page.dart';
 import 'package:metaone_wallet_sdk_example/utils.dart';
 import 'package:metaone_wallet_sdk_example/wallets_page.dart';
-import 'package:metaone_wallet_sdk_example/change_theme_page.dart';
 import 'package:metaone_wallet_sdk_example/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'theme_provider.dart';
 
-const _sdkConfig = MetaoneConfig(
-  realm: 'SHARE',
-  environment: 'test',
-  clientReference: 'demo-android-app',
-  url: 'https://static.aag.ventures/metaone/sdkconfig-demo-test.json',
-  key: 'ZNrkdLgjGh9m95wqSIPaSw',
-  sdkApiKeyPhrase: 'merry christmas',
-  mainnet: false,
-  version: '1.0.5',
-);
+    final _sdkConfig = MetaoneConfig(
+      realm: dotenv.env['SDK_REALM'].toString(),
+      environment: dotenv.env['SDK_ENVIRONMENT'].toString(),
+      clientReference: dotenv.env['SDK_API_CLIENT_REFERENCE'].toString(),
+      url: dotenv.env['SDK_CONFIG_URL'].toString(),
+      key: Platform.isAndroid ?
+       dotenv.env['SDK_KEY_ANDROID'].toString() :
+       dotenv.env['SDK_KEY_IOS'].toString(),
+      sdkApiKeyPhrase: dotenv.env['SDK_API_KEYPHRASE'].toString(),
+      mainnet: dotenv.env['SDK_MAINNET'] == 'true',
+      version: dotenv.env['VERSION'].toString()
+    );
 
-void main() => runApp(
+void main() async {
+  await dotenv.load();
+  runApp(
   ChangeNotifierProvider(
     create: (_) => ThemeProvider(ThemeData.light()),
     child: MyApp(),
   ),
 );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -58,6 +65,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isLoading = true;
       });
+
       await initialize(_sdkConfig);
       final sessionStatus = await getSessionActivityStatus();
       setState(() {

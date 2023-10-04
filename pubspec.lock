@@ -86,6 +86,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_dotenv:
+    dependency: "direct main"
+    description:
+      name: flutter_dotenv
+      sha256: "9357883bdd153ab78cbf9ffa07656e336b8bbb2b5a3ca596b0b27e119f7c7d77"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   flutter_driver:
     dependency: "direct dev"
     description: flutter
@@ -171,10 +179,10 @@ packages:
     dependency: "direct main"
     description:
       name: metaone_wallet_sdk
-      sha256: ebbb6370cb01f4684a6c4b71cbc4891df1d4c1079d5b13bac6c357ed0830105c
+      sha256: fc58ce0029a18d91311bdaf112edb9af06c7c14acc8fa34e8618f79ee719de92
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.5"
+    version: "0.1.6"
   metaone_wallet_sdk_android:
     dependency: transitive
     description:
@@ -187,10 +195,10 @@ packages:
     dependency: transitive
     description:
       name: metaone_wallet_sdk_ios
-      sha256: c6fc11120824e963f5835845f60270b4333ed75830b839bb02b88ce4c313c161
+      sha256: c8d3f9cb1bc2db603c3e2b13cd3a289b024ffc2ca20c97971d0b55177768c92f
       url: "https://pub.dev"
     source: hosted
-    version: "0.1.5"
+    version: "0.1.6"
   metaone_wallet_sdk_platform_interface:
     dependency: transitive
     description:
