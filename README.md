@@ -34,31 +34,6 @@ credentials {
 
 To begin integrating the MetaOne Wallet SDK into your Flutter iOS application, you need to add the SDK dependencies to your project. The SDK package is hosted on Cocoapods, making it easy to include in your app using your project’s podfile:
 
-Create a .plist file named metaoneSDKConfig and add following config:\*\*
-
-`<?xml version="1.0" encoding="UTF-8"?>`
-
-`<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">`
-
-`<plist version="1.0">
-<dict>
-<key>SDK_ENVIRONMENT</key>
-<string>test (test(testnet), stage(mainnet), prod(mainnet))</string>
-<key>SDK_API_CLIENT_REFERENCE</key>
-<string>given by aag</string>
-<key>SDK_CONFIG_URL</key>
-<string>your personal SDK configuration json url</string>
-<key>SDK_KEY</key>
-<string>given by aag</string>
-<key>SDK_REALM</key>
-<string>given by aag</string>
-<key>SDK_PUB_PHRASE</key>
-<string>given by aag</string>
-</dict>
-</plist>`
-
-**Step 3: Add the following code to your Podfile:**
-
 `use_frameworks!
 pod "CYBAVOWallet", :git => 'https://github.com/AAG-Ventures/wallet-fork.git'`
 
