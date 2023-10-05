@@ -22,7 +22,6 @@ import 'theme_provider.dart';
        dotenv.env['SDK_KEY_ANDROID'].toString() :
        dotenv.env['SDK_KEY_IOS'].toString(),
       sdkApiKeyPhrase: dotenv.env['SDK_API_KEYPHRASE'].toString(),
-      mainnet: dotenv.env['SDK_MAINNET'] == 'true',
       version: dotenv.env['VERSION'].toString()
     );
 
