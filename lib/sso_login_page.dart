@@ -70,7 +70,10 @@ class _LoginFormState extends State<_LoginForm> {
           HttpHeaders.contentTypeHeader: 'application/json',
           'X-Realm': 'SHARE',
         },
-        body: "{'email': $_email, 'password': '123456'}",
+        body: jsonEncode({
+          'email': _email, 
+          'password': '123456'
+        }),
       );
 
       if (statusCode != 200) {
