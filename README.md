@@ -88,6 +88,7 @@ Call `setupUserData();` to initialize user profile data
 - `openWallet()`: For new users opens the Signature creation flow. If Signature is created - opens Wallet activity.
 - `getSessionActivityStatus()`: Retrieves the current session activity status, which can be one of the values defined in the `SessionActivityStatus` enum.
 - `logout()`: Logs out the user by clearing the session data, signing out the wallet service.
+- `sendTransaction()`: Allows to initiate a signing action for sending assets from user's wallet to provided wallet address.
 - (In progress) `cancelTokenExpirationCountdown()`: Cancels the token expiration countdown if it is currently running.
 - (In progress) `setOnTokenExpirationListener(onTokenExpirationListener: OnTokenExpirationListener)`: Sets the listener for token expiration events. You can implement the `OnTokenExpirationListener` interface to handle token expiration, session activity changes, and token countdown events.
 - (In progress) `getExpireAt()`: Long: Retrieves the expiration timestamp of the user session.
