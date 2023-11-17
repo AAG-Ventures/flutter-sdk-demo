@@ -80,7 +80,7 @@ class _LoginFormState extends State<_LoginForm> {
         if (!mounted) return;
         Utils.showErrorSnackBar(
           context,
-          message: 'Failed to login with SSO. Status code: $statusCode',
+          message: 'Failed to login with SSO. Status code: $statusCode, resp: $body',
         );
         setState(() {
           _isLoading = false;
