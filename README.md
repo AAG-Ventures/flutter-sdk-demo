@@ -39,7 +39,7 @@ pod "CYBAVOWallet", :git => 'https://github.com/AAG-Ventures/wallet-fork.git'`
 
 Add the following code to your `pubspec.yaml` dependencies:
 
-`metaone_wallet_sdk: ^{version} (latest ver. 1.7.0)`
+`metaone_wallet_sdk: ^{version} (latest ver. 1.8.1)`
 
 **Step 3: Initializing SDK**
 
