@@ -39,7 +39,7 @@ pod "CYBAVOWallet", :git => 'https://github.com/AAG-Ventures/wallet-fork.git'`
 
 Add the following code to your `pubspec.yaml` dependencies:
 
-`metaone_wallet_sdk: ^{version} (latest ver. 1.8.8)`
+`metaone_wallet_sdk: ^{version} (latest ver. 2.0.1)`
 
 **Step 3: Initializing SDK**
 
@@ -86,6 +86,8 @@ Call `setupUserData();` to initialize user profile data
 - `loginWithSSO(String token)`: Performs the login process by sending an authorization token.
 - `refreshSession()`: Refreshes the user session to extend the session expiration time.
 - `openWallet()`: For new users opens the Signature creation flow. If Signature is created - opens Wallet activity.
+- `openBrowser()`: Opens browser without preset url which means for users that have never used browser it will open google.com with a wallet pre-selected that has the most value in assets. It stores last browsed url and last selected wallet.
+- `openBrowserWithUrl(url: String)`: Opens browser with set url and last used wallet or wallet with most value in assets on initial load.
 - `getSessionActivityStatus()`: Retrieves the current session activity status, which can be one of the values defined in the `SessionActivityStatus` enum.
 - `logout()`: Logs out the user by clearing the session data, signing out the wallet service.
 - `sendTransaction()`: Allows to initiate a signing action for sending assets from user's wallet to provided wallet address.
