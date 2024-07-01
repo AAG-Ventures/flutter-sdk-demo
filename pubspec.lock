@@ -179,34 +179,34 @@ packages:
     dependency: "direct main"
     description:
       name: metaone_wallet_sdk
-      sha256: "414052c5fae8888511c9feca5c68904adb46d048963b5d3e423c4bbb21e25315"
+      sha256: d6243990bddb988b2d25c3c77f9a5700074e4e3a4eda6c51ddb544ef8090dac5
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "2.0.1"
   metaone_wallet_sdk_android:
     dependency: transitive
     description:
       name: metaone_wallet_sdk_android
-      sha256: a3e4115da11b8424a432715a88a225d60297c156dd05ff380b8c5919a5de4f09
+      sha256: "68314689884a4af71eae89ca931d249070c1d0c1d702a0efd4541214d28ec32e"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "2.0.1"
   metaone_wallet_sdk_ios:
     dependency: transitive
     description:
       name: metaone_wallet_sdk_ios
-      sha256: c1dbb467c2e2f816b4c842e1a7ad0c780513450753bee73123a817d00f96adb9
+      sha256: f2b5119cb4dcaa085938549d7b4e3eabd1be221757055ee8e53a5ab26778f90a
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "2.0.1"
   metaone_wallet_sdk_platform_interface:
     dependency: transitive
     description:
       name: metaone_wallet_sdk_platform_interface
-      sha256: "1fa6d8b5204ffb669a441f87cf7b9f952feafbc644cd8f397cce213abd956613"
+      sha256: "5c9d75b108eb7a984f0efb5db4a753959af0009b89087038143f3ea05c2f2500"
       url: "https://pub.dev"
     source: hosted
-    version: "1.7.0"
+    version: "1.8.3"
   nested:
     dependency: transitive
     description:

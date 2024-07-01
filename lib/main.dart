@@ -19,9 +19,6 @@ final _sdkConfig = MetaoneConfig(
     environment: dotenv.env['SDK_ENVIRONMENT'].toString(),
     clientReference: dotenv.env['SDK_API_CLIENT_REFERENCE'].toString(),
     url: dotenv.env['SDK_CONFIG_URL'].toString(),
-    key: Platform.isAndroid
-        ? dotenv.env['SDK_KEY_ANDROID'].toString()
-        : dotenv.env['SDK_KEY_IOS'].toString(),
     sdkApiKeyPhrase: dotenv.env['SDK_API_KEYPHRASE'].toString(),
     version: dotenv.env['VERSION'].toString());
 
@@ -65,6 +62,14 @@ class _HomePageState extends State<HomePage> {
         _isLoading = true;
       });
       await initialize(_sdkConfig);
+
+      // Only needed on multiplatform configuration
+      await setPrefix('_flutter');
+      void printWalletData(Map<String, dynamic> walletData) {
+        print('Wallet data: $walletData');
+      }
+      await NativeWalletListener.startListening(printWalletData);
+
       final sessionStatus = await getSessionActivityStatus();
       setState(() {
         _isAuthorized = sessionStatus.isActive;
@@ -154,6 +159,23 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+    Future<void> _onOpenBrowserTapped() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      await openBrowser();
+      setState(() {
+        _isLoading = false;
+      });
+    } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
+      Utils.showErrorSnackBar(context, message: '$error');
+    }
+  }
+
   Future<void> _getTokenExpirationDate() async {
     try {
       setState(() {
@@ -204,6 +226,7 @@ class _HomePageState extends State<HomePage> {
         if (_isAuthorized)
           _AuthorizedView(
             onOpenWalletTapped: _onOpenWalletTapped,
+            onOpenBrowserTapped: _onOpenBrowserTapped,
             onGetTokenExpirationDateTapped: _getTokenExpirationDate,
             onRefreshSessionTapped: _onRefreshSessionTapped,
             onLogOutTapped: _onLogOutTapped,
@@ -237,12 +260,14 @@ class _UnauthorizedView extends StatelessWidget {
 class _AuthorizedView extends StatelessWidget {
   const _AuthorizedView({
     required this.onOpenWalletTapped,
+    required this.onOpenBrowserTapped,
     required this.onGetTokenExpirationDateTapped,
     required this.onRefreshSessionTapped,
     required this.onLogOutTapped,
   });
 
   final void Function() onOpenWalletTapped;
+  final void Function() onOpenBrowserTapped;
   final void Function() onGetTokenExpirationDateTapped;
   final void Function() onRefreshSessionTapped;
   final void Function() onLogOutTapped;
@@ -256,6 +281,14 @@ class _AuthorizedView extends StatelessWidget {
           child: ElevatedButton(
             onPressed: onOpenWalletTapped,
             child: const Text('Open wallet'),
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: onOpenBrowserTapped,
+            child: const Text('Open browser'),
           ),
         ),
         const SizedBox(height: 16),
